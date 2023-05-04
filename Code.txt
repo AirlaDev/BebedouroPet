@@ -1,0 +1,49 @@
+//Declaracao dos pinos conectados aos sensores
+const int PINO_SENSOR_SUPERIOR = D5; //Sensor superior no pino 13
+const int PINO_SENSOR_INFERIOR = D2; //Sensor inferior no pino 12
+
+//Declaracao do pino conectado ao rele
+const int PINO_RELE = D0;
+
+void setup() {
+  Serial.begin(38400); /*Baudrate de 38400*/
+  //Configura os pinos conectados aos sensores como entradas do sistema
+  pinMode(PINO_SENSOR_SUPERIOR, INPUT);
+  pinMode(PINO_SENSOR_INFERIOR, INPUT);
+
+  //Configura o pino conectado ao rele como uma saida do sistema
+  pinMode(PINO_RELE, OUTPUT);
+
+  //Inicia o pino conectado ao rele com um nivel logico baixo
+  digitalWrite(PINO_RELE, LOW);
+
+}
+
+void loop() {
+
+  //Realiza as leituras dos sensores e as armazena em duas variaveis
+  int leitura_sensor_superior = digitalRead(PINO_SENSOR_SUPERIOR);
+  int leitura_sensor_inferior = digitalRead(PINO_SENSOR_INFERIOR);
+
+  /* Printa a leitura digital no monitor serial */
+  
+  Serial.print("Estado sensor ALTO: "); /*"Printa: Estado sensor:" */
+  Serial.println(leitura_sensor_superior); /* Printa a leitura de estado */
+  Serial.print("Estado sensor BAIXO: "); /*"Printa: Estado sensor:" */
+  Serial.println(leitura_sensor_inferior); /* Printa a leitura de estado */
+  delay(100); /*atraso de 0,1s*/
+
+
+  //Verifica se o sensor inferior esta na ausencia de liquido
+  if(leitura_sensor_inferior == HIGH){
+    digitalWrite(PINO_RELE, HIGH); //Se for verdadeiro, aciona o rele
+  }
+
+  //Verifica se o sensor superior esta na presenca de liquido
+  if(leitura_sensor_superior == LOW){
+    digitalWrite(PINO_RELE, LOW); //Se for verdadeiro, desliga o rele
+  }
+
+  delay(100); //Aguarda 100 milissegundos para outra leitura
+
+}
